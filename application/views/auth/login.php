@@ -85,7 +85,13 @@
                             <br>
                             <button type="submit" class="w-100 btn btn-primary mt-2 font-weight-bold" type="submit"><i
                                     class="fa fa-sign-in-alt"></i> Login</button>
-                            <p class="mt-5 mb-3 text-muted">&copy; <?= date('Y') ?></p>
+                            <p class="mt-5 mb-2 text-muted">&copy; <?= date('Y') ?></p>
+                            <br>
+                            <p class="mb-3 text-muted">
+                                Admin (Username: admin, Password: admin)
+                                <br>
+                                User (Username: user, Password: user)
+                            </p>
                         </form>
                     </main>
 
@@ -95,10 +101,7 @@
 
     </div>
     <!-- /.container-fluid -->
-    <script>
-    Swal.fire("Info", "Admin (Username = admin, Password = admin) </br> User (Username = user, Password = user)",
-        "info");
-    </script>
+    
 
 </body>
 
