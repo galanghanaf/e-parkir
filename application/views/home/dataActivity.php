@@ -28,7 +28,7 @@
     <link href="<?= base_url('/assets/datatables/css/jquery.dataTables.min.css'); ?>" rel="stylesheet">
     <link href="<?= base_url('/assets/datatables/css/dataTables.dateTime.min.css'); ?>" rel="stylesheet">
     <link href="<?= base_url('/assets/datatables/css/buttons.dataTables.min.css'); ?>" rel="stylesheet">
-    <link rel="icon" href="<?= base_url() . "assets/icon.png" ?>" type="image/gif">
+
 
     <script src="<?= base_url('/assets/datatables/js/jquery-3.5.1.js') ?>"></script>
     <script src="<?= base_url('/assets/datatables/js/jquery.dataTables.min.js') ?>"></script>
@@ -83,7 +83,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="<?= base_url() . 'home'; ?>">
                     <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span></a>
@@ -94,51 +94,39 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Master Data
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= base_url() . 'home/dataactivity'; ?>">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Data Activity</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/datainspeksi'; ?>">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Data Inspeksi</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
-                    <i class="fas fa-fw fa-road"></i>
-                    <span>Data Kendaraan</span></a>
-            </li>
-            <li class="nav-item">
+
+
+            <li class="nav-item <?= $title == 'Data Karyawan' ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url() . 'home/datakaryawan'; ?>">
-                    <i class="fas fa-fw fa-suitcase"></i>
+                    <i class="fas fa-fw fa-address-book"></i>
                     <span>Data Karyawan</span></a>
             </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Settings
-            </div>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/datauser'; ?>">
+            <li class="nav-item <?= $title == 'Data Kendaraan' ? 'active' : ''; ?>">
+                <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
+                    <i class="fas fa-fw fa-car"></i>
+                    <span>Data Kendaraan</span></a>
+            </li>
+            <?php if ($login['role_id'] == 'ADMIN') : ?>
+            <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
+                <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Data User</span></a>
             </li>
-
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+            <?php endif; ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Profil</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span></a>
+            </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -166,18 +154,20 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Selamat Datang, </span>
                                 <span class="mr-2 d-none d-lg-inline text-primary small"><?= $login['nama'] ?></span>
-                                <img class="img-profile rounded-circle" src="<?= base_url('/assets/img/user.png') ?>">
+                                <img class="img-profile rounded-circle"
+                                    src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item"
+                                    href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
 
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -193,9 +183,12 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="mb-3 text-gray-800 text-center font-weight-bold"><?= $title; ?></h1>
+                    <h1 class="mb-3 text-gray-800 text-center font-weight-bold"><?= 'Data Activity Kendaraan'; ?></h1>
 
                     <div class="text-center mb-5">
+                        <a href="<?= base_url() . 'home' ?>" class="btn btn-danger font-weight-bold mx-2"><i
+                                class="fa fa-arrow-circle-left"></i>
+                            Kembali</a>
                         <a href="<?= base_url() . 'home/dataactivity' ?>" class="btn btn-primary font-weight-bold"><i
                                 class="fa fa-retweet"></i>
                             Refresh</a>
@@ -294,20 +287,22 @@
                                     </tfoot> -->
                                     <tbody>
                                         <?php $no = 1;
-                                        foreach ($queryActivity as $activity) : ?>
-                                        <?php if ($activity->plant == $login['plant']) : ?>
+                                        foreach ($queryActivity as $activitykendaraan) : ?>
+                                        <?php if ($activitykendaraan->plant == $login['plant']) : ?>
+                                        <?php if ($activitykendaraan->jenis_kendaraan == 'Motor' || $activitykendaraan->jenis_kendaraan == 'Mobil') : ?>
                                         <tr>
                                             <td><?= $no++; ?></td>
-                                            <td><?= $activity->nik; ?></td>
-                                            <td><?= $activity->nama; ?></td>
-                                            <td><?= $activity->departemen; ?></td>
-                                            <td><?= $activity->no_kendaraan; ?></td>
-                                            <td><?= $activity->jenis_kendaraan; ?></td>
-                                            <td><?= $activity->activity_datetime; ?></td>
-                                            <td> <?= $activity->activity_datetime_out; ?></td>
-                                            <td> <?= strtok($activity->create_date, " "); ?></td>
+                                            <td><?= $activitykendaraan->nik; ?></td>
+                                            <td><?= $activitykendaraan->nama; ?></td>
+                                            <td><?= $activitykendaraan->departemen; ?></td>
+                                            <td><?= $activitykendaraan->no_kendaraan; ?></td>
+                                            <td><?= $activitykendaraan->jenis_kendaraan; ?></td>
+                                            <td><?= $activitykendaraan->activity_datetime; ?></td>
+                                            <td> <?= $activitykendaraan->activity_datetime_out; ?></td>
+                                            <td> <?= strtok($activitykendaraan->create_date, " "); ?></td>
 
                                         </tr>
+                                        <?php endif; ?>
                                         <?php endif; ?>
 
                                         <?php endforeach; ?>

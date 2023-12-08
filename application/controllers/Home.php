@@ -14,10 +14,8 @@ class Home extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('session');
 
-        if ($this->session->userdata('role_id') != 'ADMIN') {
-            if ($this->session->userdata('role_id') != 'USER') {
-                redirect('auth/logout2');
-            }
+        if ($this->session->userdata('role_id') == NULL) {
+            redirect('auth/logout');
         }
 
         $this->login = $this->db->get_where(
@@ -58,7 +56,7 @@ class Home extends CI_Controller
     public function index()
     {
         $data['login'] = $this->login;
-        $data['title'] = 'SCAN QR CODE';
+        $data['title'] = 'Dasboard';
 
         $data['queryActivity'] = $this->M_Visual->getActivityByCheckIn();
         $data['queryActivityMobil'] = $this->M_Visual->rowActivityByCheckIn('Mobil');
@@ -68,7 +66,7 @@ class Home extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function dataActivity()
+    public function dataactivity()
     {
 
         $data['login'] = $this->login;
@@ -97,7 +95,7 @@ class Home extends CI_Controller
     }
 
 
-    public function dataKaryawan()
+    public function datakaryawan()
     {
         $this->db->db_debug = false;
 
@@ -139,48 +137,8 @@ class Home extends CI_Controller
         }
     }
 
-    public function dataUser()
-    {
 
-        $data['login'] = $this->login;
-        $data['title'] = 'Data User';
-
-        $this->inputRequired('nama', 'Nama');
-        $this->inputRequired('password', 'Password');
-        $this->inputRequired('role_id', 'Role');
-        $this->inputUnique('nik', 'NIK', 'tbl_user');
-        $this->inputUnique('username', 'Username', 'tbl_user');
-
-
-        if ($this->form_validation->run() == false) {
-            $data['users'] = $this->M_Visual->getDataUser();
-            $this->load->view('templates/header', $data);
-            $this->load->view('home/dataUser', $data);
-            $this->load->view('templates/footer');
-        } else {
-
-            $data = [
-                'role_id' => htmlspecialchars($this->input->post('role_id', true)),
-                'plant' => htmlspecialchars($this->input->post('plant', true)),
-                'nik' => htmlspecialchars($this->input->post('nik', true)),
-                'nama' => htmlspecialchars($this->input->post('nama', true)),
-                'username' => htmlspecialchars($this->input->post('username', true)),
-                'password' => htmlspecialchars($this->input->post('password', true)),
-                'departemen' => htmlspecialchars($this->input->post('departemen', true)),
-                'line' => htmlspecialchars($this->input->post('line', true)),
-                'posisi' => htmlspecialchars($this->input->post('posisi', true)),
-                'is_active' => htmlspecialchars($this->input->post('is_active', true)),
-
-
-            ];
-
-            $this->db->insert('tbl_user', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-			<strong>Data Berhasil Ditambahkan!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            redirect('home/dataUser');
-        }
-    }
-    public function dataKendaraan()
+    public function datakendaraan()
     {
 
         $this->db->db_debug = false;
@@ -235,15 +193,15 @@ class Home extends CI_Controller
         }
     }
 
-    public function dataKendaraanEdit($no_kendaraan)
+    public function datakendaraanedit($no_kendaraan)
     {
         $data['login'] = $this->login;
 
-        $data['title'] = 'Ubah Data Kendaraan';
+        $data['title'] = 'Data Kendaraan';
         $data['queryKendaraan'] = $this->M_Visual->getDataById('tbm_kendaraan', 'no_kendaraan', $no_kendaraan);
-        $this->load->view('home/dataKendaraanEdit', $data);
+        $this->load->view('home/datakendaraanedit', $data);
     }
-    public function dataKendaraanEditAction()
+    public function datakendaraaneditaction()
     {
         $this->db->db_debug = false;
 
@@ -255,12 +213,7 @@ class Home extends CI_Controller
         $this->inputRequired('jenis_kendaraan', 'Jenis Kendaraan');
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', "<script>Swal.fire(
-				'Gagal',
-				'Pastikan Semua Data Diisi!',
-				'error'
-			    )</script>");
-            header('Location: ' . base_url() . '/home/dataKendaraanEdit/' . $this->input->post('no_kendaraan_lama'));
+            header('Location: ' . base_url() . '/home/datakendaraanedit/' . $this->input->post('no_kendaraan_lama'));
         } else {
             $nik_karyawan = htmlspecialchars($this->input->post('nik', true));
             $cek_karyawan = $this->M_Visual->cekDataKaryawan($nik_karyawan);
@@ -284,11 +237,14 @@ class Home extends CI_Controller
                         'Nomor Kendaraan Sudah Digunakan!',
                         'error'
                         )</script>");
-                    header('Location: ' . base_url() . 'home/dataKendaraanEdit/' . $this->input->post('no_kendaraan_lama'));
+                    header('Location: ' . base_url() . 'home/datakendaraanedit/' . $this->input->post('no_kendaraan_lama'));
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Data Berhasil Diubah!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                    redirect('home/dataKendaraan');
+                    $this->session->set_flashdata('message', "<script>Swal.fire(
+                        'Berhasil',
+                        'Data Berhasil Diubah!',
+                        'success'
+                        )</script>");
+                    header('Location: ' . base_url() . '/home/datakendaraanedit/' . $this->input->post('no_kendaraan'));
                 }
             } else {
 
@@ -297,152 +253,28 @@ class Home extends CI_Controller
                     'Silahkan Daftarkan Karyawan Terlebih Dahulu, Di Data Karyawan!',
                     'error'
                 )</script>");
-                header('Location: ' . base_url() . 'home/dataKendaraanEdit/' . $this->input->post('no_kendaraan_lama'));
+                header('Location: ' . base_url() . 'home/datakendaraanedit/' . $this->input->post('no_kendaraan_lama'));
             }
         }
     }
 
-    public function dataInspeksi()
-    {
-        $data['login'] = $this->login;
 
-        $data['title'] = 'Inpeksi Kendaraan';
-        $data['tbm_kendaraan'] = $this->M_Visual->getDatakendaraan();
-        $this->load->view('home/dataInspeksi', $data);
-    }
 
-    public function dataInspeksiInput($no_kendaraan)
-    {
-        $data['login'] = $this->login;
 
-        $data['title'] = 'Inpeksi Kendaraan';
-        $data['queryKendaraan'] = $this->M_Visual->getDataById('tbm_kendaraan', 'no_kendaraan', $no_kendaraan);
-        $this->load->view('home/dataInspeksiInput', $data);
-    }
-    public function dataInspeksiInputAction()
-    {
-        $this->db->db_debug = false;
 
-        $this->inputRequired('stnk', 'STNK');
-        $this->inputRequired('sim', 'SIM');
-        $this->inputRequired('helm', 'HELM');
-        $this->inputRequired('ban', 'BAN');
-        $this->inputRequired('rem', 'REM');
-        $this->inputRequired('lampu_depan', 'LAMPU DEPAN');
-        $this->inputRequired('lampu_belakang', 'LAMPU BELAKANG');
-        $this->inputRequired('sen_kanan', 'SEN KANAN');
-        $this->inputRequired('sen_kiri', 'SEN KIRI');
-        $this->inputRequired('klakson', 'KLAKSON');
-        $this->inputRequired('lampu_rem', 'LAMPU REM');
-        $this->inputRequired('spion', 'SPION');
 
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', "<script>Swal.fire(
-				'Gagal',
-				'Pastikan Semua Data Diisi!',
-				'error'
-			    )</script>");
-            header('Location: ' . base_url() . '/home/dataInspeksiInput/' . $this->input->post('no_kendaraan'));
-        } else {
-
-            $update_data = [
-                'stnk' => htmlspecialchars($this->input->post('stnk', true)),
-                'sim' => htmlspecialchars($this->input->post('sim', true)),
-                'helm' => htmlspecialchars($this->input->post('helm', true)),
-                'ban' => htmlspecialchars($this->input->post('ban', true)),
-                'rem' => htmlspecialchars($this->input->post('rem', true)),
-                'lampu_depan' => htmlspecialchars($this->input->post('lampu_depan', true)),
-                'lampu_belakang' => htmlspecialchars($this->input->post('lampu_belakang', true)),
-                'sen_kanan' => htmlspecialchars($this->input->post('sen_kanan', true)),
-                'sen_kiri' => htmlspecialchars($this->input->post('sen_kiri', true)),
-                'klakson' => htmlspecialchars($this->input->post('klakson', true)),
-                'lampu_rem' => htmlspecialchars($this->input->post('lampu_rem', true)),
-                'spion' => htmlspecialchars($this->input->post('spion', true)),
-                'result' => htmlspecialchars($this->input->post('result', true)),
-            ];
-            $where = [
-                'no_kendaraan' => $this->input->post('no_kendaraan'),
-            ];
-            $this->db->update('tbm_kendaraan', $update_data, $where);
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Inpeksi Nomor Kendaraan <strong>(' . $this->input->post('no_kendaraan') . ')</strong> Berhasil Diselesaikan!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            redirect('home/dataInspeksi');
-        }
-    }
-    public function dataInspeksiEdit($no_kendaraan)
-    {
-        $data['login'] = $this->login;
-
-        $data['title'] = 'Inpeksi Kendaraan';
-        $data['queryKendaraan'] = $this->M_Visual->getDataById('tbm_kendaraan', 'no_kendaraan', $no_kendaraan);
-        $this->load->view('home/dataInspeksiEdit', $data);
-    }
-    public function dataInspeksiEditAction()
-    {
-        $this->db->db_debug = false;
-
-        $this->inputRequired('stnk', 'STNK');
-        $this->inputRequired('sim', 'SIM');
-        $this->inputRequired('helm', 'HELM');
-        $this->inputRequired('ban', 'BAN');
-        $this->inputRequired('rem', 'REM');
-        $this->inputRequired('lampu_depan', 'LAMPU DEPAN');
-        $this->inputRequired('lampu_belakang', 'LAMPU BELAKANG');
-        $this->inputRequired('sen_kanan', 'SEN KANAN');
-        $this->inputRequired('sen_kiri', 'SEN KIRI');
-        $this->inputRequired('klakson', 'KLAKSON');
-        $this->inputRequired('lampu_rem', 'LAMPU REM');
-        $this->inputRequired('spion', 'SPION');
-
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', "<script>Swal.fire(
-				'Gagal',
-				'Pastikan Semua Data Diisi!',
-				'error'
-			    )</script>");
-            header('Location: ' . base_url() . '/home/dataInspeksiEdit/' . $this->input->post('no_kendaraan'));
-        } else {
-
-            $update_data = [
-                'stnk' => htmlspecialchars($this->input->post('stnk', true)),
-                'sim' => htmlspecialchars($this->input->post('sim', true)),
-                'helm' => htmlspecialchars($this->input->post('helm', true)),
-                'ban' => htmlspecialchars($this->input->post('ban', true)),
-                'rem' => htmlspecialchars($this->input->post('rem', true)),
-                'lampu_depan' => htmlspecialchars($this->input->post('lampu_depan', true)),
-                'lampu_belakang' => htmlspecialchars($this->input->post('lampu_belakang', true)),
-                'sen_kanan' => htmlspecialchars($this->input->post('sen_kanan', true)),
-                'sen_kiri' => htmlspecialchars($this->input->post('sen_kiri', true)),
-                'klakson' => htmlspecialchars($this->input->post('klakson', true)),
-                'lampu_rem' => htmlspecialchars($this->input->post('lampu_rem', true)),
-                'spion' => htmlspecialchars($this->input->post('spion', true)),
-                'result' => htmlspecialchars($this->input->post('result', true)),
-
-            ];
-            $where = [
-                'no_kendaraan' => $this->input->post('no_kendaraan'),
-            ];
-            $this->db->update('tbm_kendaraan', $update_data, $where);
-
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Inpeksi Nomor Kendaraan <strong>(' . $this->input->post('no_kendaraan') . ')</strong> Berhasil Diselesaikan!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            redirect('home/dataInspeksi');
-        }
-    }
-
-    public function generateQrCode($no_kendaraan)
+    public function generateqrcode($no_kendaraan)
     {
         $data['login'] = $this->login;
         $data['title'] = 'Qr Code';
         $queryKendaraan = $this->M_Visual->getQRcode($no_kendaraan);
         $data = array('querykendaraan' => $queryKendaraan);
-        $this->load->view('home/generateQrCode', $data);
+        $this->load->view('home/generateqrcode', $data);
     }
 
 
 
-    public function dataActivityCheckOut($no_kendaraan)
+    public function dataactivitycheckOut($no_kendaraan)
     {
         $queryactivity = $this->M_Visual->getActivityByNomorKendaraan($no_kendaraan);
 
@@ -462,12 +294,14 @@ class Home extends CI_Controller
         redirect('home');
     }
 
-    public function inputDataActivity()
+    public function inputdataactivity()
     {
         $no_kendaraan = $this->input->post('no_kendaraan');
         $lokasi_input = $this->input->post('lokasi_input');
         $query_kendaraan = $this->M_Visual->scanbarcode($no_kendaraan);
+        $query_nik = $this->M_Visual->scanbarcodenik($no_kendaraan);
         $query_activity = $this->M_Visual->getActivityByNomorKendaraan($no_kendaraan);
+        $query_activity_nik = $this->M_Visual->getActivityByNIK($no_kendaraan);
         $cek_karyawan = $this->M_Visual->getDataById('tbm_karyawan', 'nik', $query_activity->nik);
         $cek_kendaraan = $this->M_Visual->getDataById('tbm_kendaraan', 'no_kendaraan', $no_kendaraan);
         if ($query_kendaraan != NULL) {
@@ -497,7 +331,7 @@ class Home extends CI_Controller
                     'nik' => $query_kendaraan->nik,
                     'nama' => $query_kendaraan->nama,
                     'departemen' => $query_kendaraan->departemen,
-                    'plant' => $query_kendaraan->plant,
+                    'plant' => $this->input->post('plant'),
                     'create_by' => $this->input->post('create_by'),
                     'activity_datetime' => date('Y-m-d H:i:s'),
                     'expiration' => time() + 61200, //satuannya 60 Detik, jadi 17 JAM = 61200 Detik
@@ -510,7 +344,7 @@ class Home extends CI_Controller
                 // 	'success'
                 // )</script>");
                 $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Berhasil!</strong> Nomor Kendaraan <b>' . $no_kendaraan . '</b> Berhasil Check In!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                <strong>Berhasil!</strong> Kendaraan Dengan Nomor <b>' . $no_kendaraan . '</b> Berhasil Check In!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 
                 $lokasi_input == 'dashboard' ? redirect('home') : redirect('home/dataactivity');
             }
@@ -530,7 +364,7 @@ class Home extends CI_Controller
             //     'success'
             // )</script>");
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-			<strong>Berhasil!</strong> Nomor Kendaraan <b>' . $no_kendaraan . '</b> Berhasil Check Out!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			<strong>Berhasil!</strong> Kendaraan Dengan Nomor <b>' . $no_kendaraan . '</b> Berhasil Check Out!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 
             $lokasi_input == 'dashboard' ? redirect('home') : redirect('home/dataactivity');
         } elseif ($cek_kendaraan != NULL) {
@@ -540,7 +374,7 @@ class Home extends CI_Controller
             //     'error'
             // )</script>");
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<strong>Gagal!</strong> Nomor Kendaraan <b>' . $no_kendaraan . '</b> Terdaftar, Namun Data Karyawan Belum Dilengkapi!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			<strong>Gagal!</strong> Kendaraan Dengan Nomor <b>' . $no_kendaraan . '</b> Terdaftar, Namun Data Karyawan Belum Dilengkapi!<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             $lokasi_input == 'dashboard' ? redirect('home') : redirect('home/dataactivity');
         } elseif ($cek_karyawan == NULL) {
             // $this->session->set_flashdata('message', "<script>Swal.fire(
@@ -549,82 +383,24 @@ class Home extends CI_Controller
             //     'error'
             // )</script>");
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<strong>Gagal!</strong> Tidak Ada Karyawan Yang Memiliki Nomor Kendaraan <b>' . $no_kendaraan . '</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+			<strong>Gagal!</strong> Tidak Ada Karyawan Yang Memiliki Kendaraan Dengan Nomor <b>' . $no_kendaraan . '</b><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
 
             $lokasi_input == 'dashboard' ? redirect('home') : redirect('home/dataactivity');
         }
     }
 
-    public function dataUserEdit($nik)
+
+    public function datakaryawanedit($nik)
     {
         $data['login'] = $this->login;
 
-        $data['title'] = 'Ubah Data User';
-        $data['getDataUserById'] = $this->M_Visual->getDataById('tbl_user', 'nik', $nik);
-        $this->load->view('templates/header', $data);
-        $this->load->view('home/dataUserEdit', $data);
-        $this->load->view('templates/footer');
-    }
-    public function dataUserEditAction()
-    {
-        $this->db->db_debug = false;
-
-        $this->inputRequired('nama', 'Nama');
-        $this->inputRequired('password', 'Password');
-        $this->inputRequired('nik', 'NIK');
-        $this->inputRequired('username', 'Username');
-
-        if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('message', "<script>Swal.fire(
-				'Gagal',
-				'Pastikan Semua Data Diisi!',
-				'error'
-			  )</script>");
-            header('Location: ' . base_url() . '/home/dataUserEdit/' . $this->input->post('nik_lama'));
-        } else {
-
-            $update_data = [
-                'nik' => htmlspecialchars($this->input->post('nik', true)),
-                'plant' => htmlspecialchars($this->input->post('plant', true)),
-                'nama' => htmlspecialchars($this->input->post('nama', true)),
-                'username' => htmlspecialchars($this->input->post('username', true)),
-                'password' => htmlspecialchars($this->input->post('password', true)),
-                'departemen' => htmlspecialchars($this->input->post('departemen', true)),
-                'line' => htmlspecialchars($this->input->post('line', true)),
-                'posisi' => htmlspecialchars($this->input->post('posisi', true)),
-                'is_active' => htmlspecialchars($this->input->post('is_active', true)),
-
-
-            ];
-            $where = [
-                'nik' => $this->input->post('nik_lama'),
-            ];
-            if (!$this->db->update('tbl_user', $update_data, $where)) {;
-                $this->db->error();
-                $this->session->set_flashdata('message', "<script>Swal.fire(
-					'Gagal',
-					'Username atau NIK Sudah Digunakan!',
-					'error'
-				)</script>");
-                header('Location: ' . base_url() . 'home/dataUserEdit/' . $this->input->post('nik_lama'));
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-				<strong>Data Berhasil Diubah!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-                redirect('home/dataUser');
-            }
-        }
-    }
-    public function dataKaryawanEdit($nik)
-    {
-        $data['login'] = $this->login;
-
-        $data['title'] = 'Ubah Data Karyawan';
+        $data['title'] = 'Data Karyawan';
         $data['queryKaryawan'] = $this->M_Visual->getDataById('tbm_karyawan', 'nik', $nik);
         $this->load->view('templates/header', $data);
-        $this->load->view('home/dataKaryawanEdit', $data);
+        $this->load->view('home/datakaryawanedit', $data);
         $this->load->view('templates/footer');
     }
-    public function dataKaryawanEditAction()
+    public function datakaryawaneditaction()
     {
         $this->db->db_debug = false;
 
@@ -639,7 +415,7 @@ class Home extends CI_Controller
 				'Pastikan Semua Data Diisi!',
 				'error'
 			    )</script>");
-            header('Location: ' . base_url() . '/home/dataKaryawanEdit/' . $this->input->post('nik'));
+            header('Location: ' . base_url() . '/home/datakaryawanedit/' . $this->input->post('nik'));
         } else {
 
             $update_data = [
@@ -659,7 +435,7 @@ class Home extends CI_Controller
 					'NIK Sudah Digunakan!',
 					'error'
 				    )</script>");
-                header('Location: ' . base_url() . 'home/dataKaryawanEdit/' . $this->input->post('nik_lama'));
+                header('Location: ' . base_url() . 'home/datakaryawanedit/' . $this->input->post('nik_lama'));
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
 				<strong>Data Berhasil Diubah!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -668,7 +444,7 @@ class Home extends CI_Controller
         }
     }
 
-    public function dataKaryawanAutoFill($plant)
+    public function datakaryawanautofill($plant)
     {
         if (isset($_GET['term'])) {
             $result = $this->M_Visual->getKaryawanAutoFill($plant, $_GET['term']);
@@ -676,7 +452,8 @@ class Home extends CI_Controller
                 foreach ($result as $row)
                     // $arr_result[] = $row->materialDesc;
                     $arr_result[] = array(
-                        'label' => $row->nik,
+                        'label' => $row->nik . ' (' . $row->nama . ')',
+                        'nik' => $row->nik,
                         'nama' => $row->nama,
                         'plant' => $row->plant,
 
@@ -685,30 +462,95 @@ class Home extends CI_Controller
             }
         }
     }
-
-
-    public function deleteDataUser($nik)
+    public function profil($username)
     {
-        $where = array('nik' => $nik);
-        $this->M_Visual->delete_data($where, 'tbl_user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>Data Berhasil Dihapus!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        redirect('home/dataUser');
+        $data['login'] = $this->login;
+        $data['users'] = $this->M_Visual->getUser($username);
+        $data['title'] = 'Profil Saya';
+        $this->load->view('templates/admin_header', $data);
+        $this->load->view('home/profil', $data);
+        $this->load->view('templates/admin_footer');
     }
-    public function deleteDataKaryawan($nik)
+
+    public function edit_profil()
     {
-        $where = array('nik' => $nik);
-        $this->M_Visual->delete_data($where, 'tbm_karyawan');
-        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>Data Berhasil Dihapus!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        redirect('home/datakaryawan');
-    }
-    public function deleteDataKendaraan($no_kendaraan)
-    {
-        $where = array('no_kendaraan' => $no_kendaraan);
-        $this->M_Visual->delete_data($where, 'tbm_kendaraan');
-        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>Data Berhasil Dihapus!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-        redirect('home/datakendaraan');
+        $this->db->db_debug = false;
+
+        $data['login'] = $this->login;
+        $username = htmlspecialchars($this->input->post('username', true));
+        $username_lama = htmlspecialchars($this->input->post('username_lama', true));
+        $photo_lama = htmlspecialchars($this->input->post('photo_lama', true));
+        $nama = htmlspecialchars($this->input->post('nama', true));
+        $password = htmlspecialchars($this->input->post('password', true));
+        $nik = htmlspecialchars($this->input->post('nik', true));
+        $departemen = htmlspecialchars($this->input->post('departemen', true));
+
+        $this->inputRequired('nama', 'Nama');
+        $this->inputRequired('password', 'Password');
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', "<script>Swal.fire(
+				'Gagal',
+				'Pastikan Semua Data Diisi!',
+				'error'
+			    )</script>");
+            header('Location: ' . base_url() . '/home/profil/' . $username_lama);
+        } else {
+
+            if (!empty($_FILES['photo']['name'])) {
+                // $username = time().$_FILES["userfiles"]['name'];
+                $config['file_name'] = time();
+                $config['upload_path']          = './assets/imgusers/';
+                $config['allowed_types']        = 'jpeg|jpg|png';
+                $config['max_size']             = 10000;
+
+                // Delete Photo Lama
+                unlink('./assets/imgusers/' . $photo_lama);
+
+                $this->load->library('upload', $config);
+                $this->upload->do_upload('photo');
+                $uploadData = $this->upload->data();
+                $filename = $uploadData['file_name'];
+                $update_data = [
+                    'nama' => $nama,
+                    'username' => $username,
+                    'password' => $password,
+                    'photo' => $filename,
+                    'created_by' => htmlspecialchars($this->input->post('created_by', true)),
+                ];
+            } else {
+                $update_data = [
+                    'nama' => $nama,
+                    'username' => $username,
+                    'password' => $password,
+                    'nik' => $nik,
+                    'departemen' => $departemen,
+                    'created_by' => htmlspecialchars($this->input->post('created_by', true)),
+                ];
+            }
+
+            $where = [
+                'username' => $username_lama,
+            ];
+            if (!$this->db->update('tbl_user', $update_data, $where)) {;
+                $this->db->error();
+                $this->session->set_flashdata('message', "<script>Swal.fire(
+                        'Gagal',
+                        'Username Sudah Digunakan!',
+                        'error'
+                        )</script>");
+                header('Location: ' . base_url() . '/home/profil/' . $username_lama);
+            } else {
+                $this->session->set_userdata('photo', $filename);
+                $this->session->set_userdata('username', $username);
+                $this->session->set_userdata('password', $password);
+                $this->session->set_flashdata('message', "<script>Swal.fire(
+                    'Berhasil',
+                    'Data Berhasil Diubah!',
+                    'success'
+                    )</script>");
+                header('Location: ' . base_url() . '/home/profil/' . $username);
+            }
+        }
     }
 }

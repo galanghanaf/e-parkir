@@ -16,7 +16,7 @@
     <!-- Start FontAwesome -->
     <link rel="stylesheet" href="<?= base_url('/assets/fontawesome-v4/css/all.min.css') ?>">
     <!-- End FontAwesome -->
-    <link rel="icon" href="<?= base_url() . "assets/icon.png" ?>" type="image/gif">
+
 
     <script src="<?= base_url('/assets/js/script.js') ?>"></script>
     <script src="<?= base_url('/assets/qrcode/qrcode.min.js') ?>"></script>
@@ -42,8 +42,6 @@
             height: 100px;
 
         }
-
-       
     </style>
 
 </head>
@@ -89,8 +87,11 @@
                                                     correctLevel: QRCode.CorrectLevel.H
                                                 });
                                                 $('body').on('click', '.qrcode_download', function() {
-                                                    let dataUrl = document.querySelector('#qrcode').querySelector('img').src;
-                                                    downloadURI(dataUrl, 'qrcode_<?= $querykendaraan->nik ?>_<?= $querykendaraan->nama ?>_<?= $querykendaraan->no_kendaraan ?>.png');
+                                                    let dataUrl = document.querySelector('#qrcode')
+                                                        .querySelector('img').src;
+                                                    downloadURI(dataUrl,
+                                                        'qrcode_<?= $querykendaraan->nik ?>_<?= $querykendaraan->nama ?>_<?= $querykendaraan->no_kendaraan ?>.png'
+                                                    );
                                                 })
 
                                             };
@@ -124,11 +125,16 @@
                     <i class="fa fa-qrcode"></i> Download QR Code
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item qrcode_download" href="#"><i class="fa fa-qrcode"></i> Download PNG</a></li>
-                    <li><a class="dropdown-item j-pdf__btn pdf__screenshot" href="#"><i class="fa fa-camera"></i> Download Dengan Nama</a></li>
-                    <li><a class="dropdown-item j-pdf__btn pdf__gen" href="#"><i class="fa fa-file-pdf"></i> Download PDF</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="printDiv('qrcode')" ><i class="fa fa-print"></i> Print QR Code</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="printDiv('canvas')" ><i class="fa fa-print"></i> Print QR Code Dengan Nama</a></li>
+                    <li><a class="dropdown-item qrcode_download" href="#"><i class="fa fa-qrcode"></i> Download PNG</a>
+                    </li>
+                    <li><a class="dropdown-item j-pdf__btn pdf__screenshot" href="#"><i class="fa fa-camera"></i>
+                            Download Dengan Nama</a></li>
+                    <li><a class="dropdown-item j-pdf__btn pdf__gen" href="#"><i class="fa fa-file-pdf"></i> Download
+                            PDF</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="printDiv('qrcode')"><i class="fa fa-print"></i> Print
+                            QR Code</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="printDiv('canvas')"><i class="fa fa-print"></i> Print
+                            QR Code Dengan Nama</a></li>
                 </ul>
             </div>
         </div>
@@ -148,7 +154,7 @@
 
 
         <div>
-            <a href="<?= base_url() . 'home/dataKendaraan'; ?>" class="btn btn-danger fw-bold mt-3"><i class="fa fa-share-square"></i> Kembali</a>
+            <a href="<?= base_url() . 'home/datakendaraan'; ?>" class="btn btn-danger fw-bold mt-3"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
         </div>
     </center>
 

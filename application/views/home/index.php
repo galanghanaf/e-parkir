@@ -1,8 +1,9 @@
 <!-- Start sweetalert -->
 <script src="<?= base_url('/assets/sweetalert2-11.7.0/sweetalert2.all.min.js') ?>"></script>
 <!-- End sweetalert -->
-<link rel="icon" href="<?= base_url() . "assets/icon.png" ?>" type="image/gif">
+
 <!-- Page Wrapper -->
+
 <div id="wrapper">
 
     <!-- Sidebar -->
@@ -31,51 +32,40 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Interface
+            Master Data
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url() . 'home/dataactivity'; ?>">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Data Activity</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url() . 'home/datainspeksi'; ?>">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Data Inspeksi</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
-                <i class="fas fa-fw fa-road"></i>
-                <span>Data Kendaraan</span></a>
-        </li>
-        <li class="nav-item">
+
+
+        <li class="nav-item <?= $title == 'Data Karyawan' ? 'active' : ''; ?>">
             <a class="nav-link" href="<?= base_url() . 'home/datakaryawan'; ?>">
-                <i class="fas fa-fw fa-suitcase"></i>
+                <i class="fas fa-fw fa-address-book"></i>
                 <span>Data Karyawan</span></a>
         </li>
-
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Settings
-        </div>
-
-        <!-- Nav Item - Charts -->
+        <li class="nav-item <?= $title == 'Data Kendaraan' ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
+                <i class="fas fa-fw fa-car"></i>
+                <span>Data Kendaraan</span></a>
+        </li>
+        <?php if ($login['role_id'] == 'ADMIN') : ?>
+            <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
+                <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Data User</span></a>
+            </li>
+        <?php endif; ?>
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url() . 'home/datauser'; ?>">
-                <i class="fas fa-fw fa-users"></i>
-                <span>Data User</span></a>
+            <a class="nav-link" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Profil</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
+                <i class="fas fa-fw fa-sign-out-alt"></i>
+                <span>Logout</span></a>
         </li>
 
-
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
@@ -99,22 +89,20 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Selamat Datang, </span>
                             <span class="mr-2 d-none d-lg-inline text-primary small"><?= $login['nama'] ?></span>
-                            <img class="img-profile rounded-circle" src="<?= base_url('/assets/img/user.png') ?>">
+                            <img class="img-profile rounded-circle" src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
                         </a>
                         <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
 
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <a class="dropdown-item" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -129,6 +117,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+
                 <div class="row" style="display: flex; justify-content: center;">
 
                     <!-- Earnings (Monthly) Card Example -->
@@ -141,9 +130,9 @@
                                             Mobil</div>
                                         <?php $mobil = 0;
                                         foreach ($queryActivity as $activity) : ?>
-                                        <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Mobil') : ?>
-                                        <?php $mobil++; ?>
-                                        <?php endif; ?>
+                                            <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Mobil') : ?>
+                                                <?php $mobil++; ?>
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                         <div class="h4 mb-0 font-weight-bold text-gray-800"><?= $mobil; ?></div>
                                     </div>
@@ -154,20 +143,17 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="mx-5">
 
-                        <h4 class="mb-2 text-gray-800 text-center font-weight-bold"><?= $title; ?></h4>
+                        <h4 class="mb-2 text-gray-800 text-center font-weight-bold"><?= 'SCAN PLAT NOMOR'; ?></h4>
 
-                        <form id="formUser" action="<?= base_url() . '/home/inputdataactivity' ?>" method="post"
-                            enctype="multipart/form-data">
+                        <form id="formUser" action="<?= base_url() . '/home/inputdataactivity' ?>" method="post" enctype="multipart/form-data">
                             <div class="text-center mt-3">
                                 <input type="text" name="no_kendaraan" class="form-control" id="no_kendaraan" autofocus>
                                 <input type="hidden" name="plant" value="<?= $login['plant']; ?>">
                                 <input type="hidden" name="create_by" value="<?= $login['nama']; ?>">
                                 <input type="hidden" name="lokasi_input" value="dashboard">
-                                <button type="submit" class="btn btn-success font-weight-bold mt-3"><i
-                                        class='fas fa-plus-circle'></i> Tambah
-                                    Data</button>
                             </div>
                             <br>
                         </form>
@@ -182,9 +168,9 @@
                                             Motor</div>
                                         <?php $motor = 0;
                                         foreach ($queryActivity as $activity) : ?>
-                                        <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Motor') : ?>
-                                        <?php $motor++; ?>
-                                        <?php endif; ?>
+                                            <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Motor') : ?>
+                                                <?php $motor++; ?>
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                         <div class="h4 mb-0 font-weight-bold text-gray-800"><?= $motor ?></div>
 
@@ -197,14 +183,22 @@
                         </div>
                     </div>
                 </div>
+                <center>
+                    <span class="badge badge-pill badge-secondary mb-2 text-center">
+                        Untuk melakukan Check-In dan Check-Out, Silahkan Input Nomor Kendaraan di SCAN PLAT NOMOR,
+                        Kemudian
+                        Tekan Enter Pada Keyboard.
 
+                    </span>
+                </center>
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="mt-1 font-weight-bold text-primary float-left"><?= $title; ?></h6>
 
-                        <a href="<?= base_url() . 'home' ?>"
-                            class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
+                        <a href="<?= base_url() . 'home/dataactivity' ?>" class="btn btn-sm btn-success font-weight-bold float-left"><i class="fa fa-address-book"></i>
+                            Detail Activity</a>
+
+                        <a href="<?= base_url() . 'home' ?>" class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
                             Refresh</a>
                     </div>
                     <?php echo $this->session->flashdata('message') ?>
@@ -221,7 +215,7 @@
                                         <th>No. Kendaraan</th>
                                         <th>Jenis Kendaraan</th>
                                         <th>Jam Masuk</th>
-                                        <th>Action</th>
+                                        <th width="200px">Action</th>
                                     </tr>
                                 </thead>
                                 <!-- <tfoot>
@@ -238,30 +232,30 @@
                                 <tbody>
                                     <?php $no = 1;
                                     foreach ($queryActivity as $activity) : ?>
-                                    <?php if ($activity->plant == $login['plant']) : ?>
+                                        <?php if ($activity->plant == $login['plant']) : ?>
+                                            <?php if ($activity->jenis_kendaraan == 'Motor' || $activity->jenis_kendaraan == 'Mobil') : ?>
 
-                                    <tr>
-                                        <td><?= $no++; ?></td>
-                                        <td><?= $activity->nik; ?></td>
-                                        <td><?= $activity->nama; ?></td>
-                                        <td><?= $activity->departemen; ?></td>
-                                        <td><?= $activity->no_kendaraan; ?></td>
-                                        <td><?= $activity->jenis_kendaraan; ?></td>
-                                        <td><?= $activity->activity_datetime; ?></td>
-                                        <td>
-                                            <?php if ($activity->activity_datetime_out == NULL) : ?>
-                                            <div class="text-center">
-                                                <a onclick="activityCheckOut('<?= base_url() . 'home/dataActivityCheckOut/' . $activity->no_kendaraan ?>')"
-                                                    class="btn btn-danger font-weight-bold"><i
-                                                        class="fas fa-sign-out-alt"></i> Check Out</a>
-                                            </div>
-                                            <?php else : ?>
-                                            <?= $activity->activity_datetime_out ?>
+                                                <tr>
+                                                    <td><?= $no++; ?></td>
+                                                    <td><?= $activity->nik; ?></td>
+                                                    <td><?= $activity->nama; ?></td>
+                                                    <td><?= $activity->departemen; ?></td>
+                                                    <td><?= $activity->no_kendaraan; ?></td>
+                                                    <td><?= $activity->jenis_kendaraan; ?></td>
+                                                    <td><?= $activity->activity_datetime; ?></td>
+                                                    <td>
+                                                        <?php if ($activity->activity_datetime_out == NULL) : ?>
+                                                            <div class="text-center">
+                                                                <a onclick="activityCheckOut('<?= base_url() . 'home/dataactivitycheckOut/' . $activity->no_kendaraan ?>')" class="btn btn-danger font-weight-bold"><i class="fas fa-sign-out-alt"></i> Check Out</a>
+                                                            </div>
+                                                        <?php else : ?>
+                                                            <?= $activity->activity_datetime_out ?>
+                                                        <?php endif; ?>
+                                                    </td>
+
+                                                </tr>
                                             <?php endif; ?>
-                                        </td>
-
-                                    </tr>
-                                    <?php endif; ?>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
 
                                 </tbody>
@@ -270,11 +264,17 @@
                     </div>
                 </div>
 
+
+
+
+
             </div>
             <!-- /.container-fluid -->
 
         </div>
         <!-- End of Main Content -->
+
+
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">

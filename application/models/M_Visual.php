@@ -58,6 +58,44 @@ class M_Visual extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function getSecurity()
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_user");
+        $this->db->join('tbm_karyawan', 'tbm_karyawan.nik = tbl_user.nik', 'right');
+        $this->db->where('tbm_karyawan.departemen', 'SECURITY');
+        $this->db->order_by("tbl_user.update_date", "desc");
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getUserByNik($nik)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_user");
+        $this->db->where("nik", $nik);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getUser($username)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_user");
+        $this->db->where("username", $username);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getSecurityByNik($nik)
+    {
+        $this->db->select("*");
+        $this->db->from("tbl_user");
+        $this->db->join('tbm_karyawan', 'tbm_karyawan.nik = tbl_user.nik', 'right');
+        $this->db->where("tbm_karyawan.nik", $nik);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function getKendaraanTbm()
     {
         $this->db->select("*");
@@ -96,6 +134,17 @@ class M_Visual extends CI_Model
         // $query = $this->db->last_query();
         return $query->row();
     }
+    public function getActivityByNIK($where)
+    {
+        $this->db->select("*");
+        $this->db->from("tbm_activity");
+        $this->db->where("nik", $where);
+        $this->db->order_by("id", "desc");
+        $this->db->limit('1');
+        $query = $this->db->get();
+        // $query = $this->db->last_query();
+        return $query->row();
+    }
 
     public function exportActivityTbm($startdate, $enddate)
     {
@@ -114,6 +163,15 @@ class M_Visual extends CI_Model
         $this->db->from('tbm_kendaraan');
         $this->db->join('tbm_karyawan', 'tbm_karyawan.nik = tbm_kendaraan.nik');
         $this->db->where('no_kendaraan', $nokendaraan);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    function scanbarcodenik($nik)
+    {
+        $this->db->select('*');
+        $this->db->from('tbm_kendaraan');
+        $this->db->join('tbm_karyawan', 'tbm_karyawan.nik = tbm_kendaraan.nik');
+        $this->db->where('tbm_kendaraan.nik', $nik);
         $query = $this->db->get();
         return $query->row();
     }

@@ -17,7 +17,7 @@
 
     <!-- Custom styles for this template -->
     <link href="<?= base_url('/assets/sbadmin2/css/sb-admin-2.min.css') ?>" rel="stylesheet">
-    <link rel="icon" href="<?= base_url() . "assets/icon.png" ?>" type="image/gif">
+
     <!-- Custom styles for this page -->
     <link href="<?= base_url('/assets/sbadmin2/vendor/datatables/dataTables.bootstrap4.min.css') ?>" rel="stylesheet">
 
@@ -71,51 +71,39 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Master Data
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/dataactivity'; ?>">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Data Activity</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/datainspeksi'; ?>">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Data Inspeksi</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
-                    <i class="fas fa-fw fa-road"></i>
-                    <span>Data Kendaraan</span></a>
-            </li>
-            <li class="nav-item">
+
+
+            <li class="nav-item <?= $title == 'Data Karyawan' ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url() . 'home/datakaryawan'; ?>">
-                    <i class="fas fa-fw fa-suitcase"></i>
+                    <i class="fas fa-fw fa-address-book"></i>
                     <span>Data Karyawan</span></a>
             </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Settings
-            </div>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() . 'home/datauser'; ?>">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Data User</span></a>
+            <li class="nav-item <?= $title == 'Data Kendaraan' ? 'active' : ''; ?>">
+                <a class="nav-link" href="<?= base_url() . 'home/datakendaraan'; ?>">
+                    <i class="fas fa-fw fa-car"></i>
+                    <span>Data Kendaraan</span></a>
             </li>
-
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+            <?php if ($login['role_id'] == 'ADMIN') : ?>
+                <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
+                    <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Data User</span></a>
+                </li>
+            <?php endif; ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Profil</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span></a>
+            </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -142,17 +130,17 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Selamat Datang, </span>
                                 <span class="mr-2 d-none d-lg-inline text-primary small"><?= $login['nama'] ?></span>
-                                <img class="img-profile rounded-circle" src="<?= base_url('/assets/img/user.png') ?>">
+                                <img class="img-profile rounded-circle" src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
 
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" onclick="logout('<?= base_url() . 'auth/logout'; ?>');">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -192,13 +180,13 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Plant</th>
                                             <th>NIK</th>
                                             <th>Nama</th>
                                             <th>No. Sim</th>
                                             <th>No. Kendaraan</th>
-                                            <th>Jenis Kendaraan</th>
-                                            <th>Hasil Inpeksi</th>
-                                            <th>Aksi</th>
+                                            <th width="60px">Jenis Kendaraan</th>
+                                            <th width="230px">Aksi</th>
                                         </tr>
                                     </thead>
                                     <!-- <tfoot>
@@ -216,25 +204,23 @@
                                         <?php $no = 1;
                                         foreach ($tbm_kendaraan as $row) : ?>
                                             <?php if ($row->plant == $login['plant']) : ?>
+                                                <?php if ($row->jenis_kendaraan == 'Motor' || $row->jenis_kendaraan == 'Mobil') : ?>
+                                                    <tr>
+                                                        <td><?= $no++; ?></td>
+                                                        <td><?= $row->plant; ?></td>
+                                                        <td><?= $row->nik; ?></td>
+                                                        <td><?= $row->nama; ?></td>
+                                                        <td><?= $row->no_sim; ?></td>
+                                                        <td><?= $row->no_kendaraan; ?></td>
+                                                        <td><?= $row->jenis_kendaraan; ?></td>
 
-                                                <tr>
-                                                    <td><?= $no++; ?></td>
-                                                    <td><?= $row->nik; ?></td>
-                                                    <td><?= $row->nama; ?></td>
-                                                    <td><?= $row->no_sim; ?></td>
-                                                    <td><?= $row->no_kendaraan; ?></td>
-                                                    <td><?= $row->jenis_kendaraan; ?></td>
-                                                    <td class="text-center">
-                                                        <span class="<?= ($row->result == '12') ? 'badge badge-success' : (($row->result < '12') ? 'badge badge-warning' : 'badge badge-danger') ?>">
-                                                            <?= ($row->result == '12') ? 'PASSED' : (($row->result < '12') ? 'WARNING' : 'FAILED') ?>
-                                                        </span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="<?= base_url('/home/generateQrCode/') ?><?= $row->no_kendaraan ?>" class="btn btn-sm btn-primary font-weight-bold"><i class="fas fa-qrcode"></i> Qr Code</a>
-                                                        <a href="<?= base_url('/home/dataKendaraanEdit/') ?><?= $row->no_kendaraan ?>" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
-                                                        <a onclick="deleteResult('<?= base_url('/home/deleteDataKendaraan/') ?><?= $row->no_kendaraan ?>');" class="btn btn-sm btn-danger fw-bold"><i class="fa fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
+                                                        <td class="text-center">
+                                                            <a href="<?= base_url('/home/generateqrcode/') ?><?= $row->no_kendaraan ?>" class="btn btn-success font-weight-bold"><i class="fas fa-qrcode"></i> Qr Code</a>
+                                                            <a href="<?= base_url('/home/datakendaraanedit/') ?><?= $row->no_kendaraan ?>" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
                                             <?php endif; ?>
 
                                         <?php endforeach; ?>
@@ -295,22 +281,33 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class=" modal-content">
                 <div class="modal-header">
-                    <span class="h4 mt-2">Tambah Kendaraan | <span class="h6"><?= date("d-m-Y,h:i:s") ?></span></span>
+                    <span class="h4 font-weight-bold mt-2">Tambah Kendaraan | <span class="h6"><?= date("d-m-Y,h:i:s") ?></span></span>
 
                 </div>
                 <div class="modal-body">
-                    <form id="formUser" action="<?= base_url() . 'home/dataKendaraan' ?>" method="post" enctype="multipart/form-data">
+                    <form id="formUser" action="<?= base_url() . 'home/datakendaraan' ?>" method="post" enctype="multipart/form-data">
 
                         <div class="row">
                             <!-- Start Left Form -->
                             <div class="col-md mx-5">
 
+                                <center>
+                                    <span class="badge badge-pill badge-secondary mb-2 text-center">Pastikan Tambahkan
+                                        Data
+                                        Karyawan
+                                        Terlebih
+                                        Dahulu, Apabila Anda Ingin Menambahkan Data Kendaraan!</span>
+                                </center>
+
+                                <input autofocus type="number" class="form-control" id="search_nik" name="label" placeholder="Masukan NIK Untuk Mencari Data Karyawan">
+                                <br>
                                 <div class="row">
+
                                     <div class="col">
 
                                         <div class="mb-3">
                                             <label for="nik" class="form-label control-label">NIK</label>
-                                            <input type="number" name="nik" class="form-control" id="nik">
+                                            <input readonly type="number" name="nik" class="form-control" id="nik">
                                             <input type="hidden" name="create_by" class="form-control" id="create_by" value="<?= $login['nama']; ?>">
 
                                         </div>
@@ -319,13 +316,17 @@
                                             <input type="text" name="nama" class="form-control" id="nama" readonly oninput="this.value = this.value.toUpperCase()">
                                         </div>
                                         <div class="mb-3">
+                                            <label for="plant" class="form-label control-label">Plant</label>
+                                            <input type="text" name="plant" class="form-control" id="plant" readonly>
+                                        </div>
+
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
                                             <label for="no_kendaraan" class="form-label control-label">Nomor
                                                 Kendaraan</label>
                                             <input type="text" name="no_kendaraan" class="form-control" id="no_kendaraan" oninput="this.value = this.value.toUpperCase()">
                                         </div>
-                                    </div>
-                                    <div class="col">
-
                                         <div class="mb-3">
                                             <label for="no_sim" class="form-label control-label">Nomor SIM</label>
                                             <input type="text" name="no_sim" class="form-control" id="no_sim">
@@ -340,10 +341,7 @@
                                                 <option value="Motor">Motor</option>
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="plant" class="form-label control-label">Plant</label>
-                                            <input type="text" name="plant" class="form-control" id="plant" readonly>
-                                        </div>
+
                                     </div>
 
                                 </div>
@@ -352,7 +350,7 @@
 
                                 <div class="float-right mt-3">
                                     <a class="btn btn-danger font-weight-bold mx-2" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</a>
-                                    <button type="submit" class="btn btn-success font-weight-bold" onclick="submitResultUser(event);"><i class='fas fa-plus-circle'></i> Tambah
+                                    <button type="submit" class="btn btn-success font-weight-bold" onclick="submitKendaraan(event);"><i class='fas fa-plus-circle'></i> Tambah
                                         Data</button>
                                 </div>
                             </div>
@@ -367,10 +365,11 @@
 
     <script>
         $(document).ready(function() {
-            $('#nik').autocomplete({
-                source: "<?= base_url() . 'home/dataKaryawanAutoFill/' . $login['plant'] . '/?' ?>",
+            $('#search_nik').autocomplete({
+                source: "<?= base_url() . 'home/datakaryawanautofill/' . $login['plant'] . '/?' ?>",
                 select: function(event, ui) {
-                    $('[name="nik"]').val(ui.item.label);
+                    $('[name="label"]').val(ui.item.label);
+                    $('[name="nik"]').val(ui.item.nik);
                     $('[name="nama"]').val(ui.item.nama);
                     $('[name="plant"]').val(ui.item.plant);
                 }
