@@ -270,7 +270,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; E-Parkir <?= date('Y'); ?></span>
+                        <span>Copyright &copy; Galang Hanafi <?= date('Y'); ?></span>
                     </div>
                 </div>
             </footer>
@@ -303,13 +303,7 @@
                         <div class="row">
                             <!-- Start Left Form -->
                             <div class="col-md">
-                                <center>
-                                    <span class="badge badge-pill badge-secondary mb-2 text-center">Pastikan Tambahkan
-                                        Data
-                                        Karyawan
-                                        Terlebih
-                                        Dahulu, Apabila Anda Ingin Menambahkan Data Kendaraan!</span>
-                                </center>
+
                                 <input autofocus type="number" class="form-control" id="search_nik" name="label"
                                     placeholder="Masukan NIK Untuk Mencari Data Karyawan">
                                 <br>

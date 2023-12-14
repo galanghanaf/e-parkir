@@ -49,11 +49,11 @@
                 <span>Data Kendaraan</span></a>
         </li>
         <?php if ($login['role_id'] == 'ADMIN') : ?>
-            <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
-                <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Data User</span></a>
-            </li>
+        <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Data User</span></a>
+        </li>
         <?php endif; ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
@@ -89,13 +89,16 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Selamat Datang, </span>
                             <span class="mr-2 d-none d-lg-inline text-primary small"><?= $login['nama'] ?></span>
-                            <img class="img-profile rounded-circle" src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
+                            <img class="img-profile rounded-circle"
+                                src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
                         </a>
                         <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
@@ -130,9 +133,9 @@
                                             Mobil</div>
                                         <?php $mobil = 0;
                                         foreach ($queryActivity as $activity) : ?>
-                                            <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Mobil') : ?>
-                                                <?php $mobil++; ?>
-                                            <?php endif; ?>
+                                        <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Mobil') : ?>
+                                        <?php $mobil++; ?>
+                                        <?php endif; ?>
                                         <?php endforeach; ?>
                                         <div class="h4 mb-0 font-weight-bold text-gray-800"><?= $mobil; ?></div>
                                     </div>
@@ -148,7 +151,8 @@
 
                         <h4 class="mb-2 text-gray-800 text-center font-weight-bold"><?= 'SCAN PLAT NOMOR'; ?></h4>
 
-                        <form id="formUser" action="<?= base_url() . '/home/inputdataactivity' ?>" method="post" enctype="multipart/form-data">
+                        <form id="formUser" action="<?= base_url() . '/home/inputdataactivity' ?>" method="post"
+                            enctype="multipart/form-data">
                             <div class="text-center mt-3">
                                 <input type="text" name="no_kendaraan" class="form-control" id="no_kendaraan" autofocus>
                                 <input type="hidden" name="plant" value="<?= $login['plant']; ?>">
@@ -168,9 +172,9 @@
                                             Motor</div>
                                         <?php $motor = 0;
                                         foreach ($queryActivity as $activity) : ?>
-                                            <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Motor') : ?>
-                                                <?php $motor++; ?>
-                                            <?php endif; ?>
+                                        <?php if ($activity->plant == $login['plant'] && $activity->jenis_kendaraan == 'Motor') : ?>
+                                        <?php $motor++; ?>
+                                        <?php endif; ?>
                                         <?php endforeach; ?>
                                         <div class="h4 mb-0 font-weight-bold text-gray-800"><?= $motor ?></div>
 
@@ -183,22 +187,18 @@
                         </div>
                     </div>
                 </div>
-                <center>
-                    <span class="badge badge-pill badge-secondary mb-2 text-center">
-                        Untuk melakukan Check-In dan Check-Out, Silahkan Input Nomor Kendaraan di SCAN PLAT NOMOR,
-                        Kemudian
-                        Tekan Enter Pada Keyboard.
 
-                    </span>
-                </center>
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
 
-                        <a href="<?= base_url() . 'home/dataactivity' ?>" class="btn btn-sm btn-success font-weight-bold float-left"><i class="fa fa-address-book"></i>
+                        <a href="<?= base_url() . 'home/dataactivity' ?>"
+                            class="btn btn-sm btn-success font-weight-bold float-left"><i
+                                class="fa fa-address-book"></i>
                             Detail Activity</a>
 
-                        <a href="<?= base_url() . 'home' ?>" class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
+                        <a href="<?= base_url() . 'home' ?>"
+                            class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
                             Refresh</a>
                     </div>
                     <?php echo $this->session->flashdata('message') ?>
@@ -218,44 +218,36 @@
                                         <th width="200px">Action</th>
                                     </tr>
                                 </thead>
-                                <!-- <tfoot>
-                                        <tr>
-                                        <th>NIK</th>
-                                            <th>Nama</th>
-                                            <th>Departemen</th>
-                                            <th>No. Kendaraan</th>
-                                            <th>Jenis Kendaraan</th>
-                                            <th>Jam Masuk</th>
-                                        </tr>
-                                        </tr>
-                                    </tfoot> -->
+
                                 <tbody>
                                     <?php $no = 1;
                                     foreach ($queryActivity as $activity) : ?>
-                                        <?php if ($activity->plant == $login['plant']) : ?>
-                                            <?php if ($activity->jenis_kendaraan == 'Motor' || $activity->jenis_kendaraan == 'Mobil') : ?>
+                                    <?php if ($activity->plant == $login['plant']) : ?>
+                                    <?php if ($activity->jenis_kendaraan == 'Motor' || $activity->jenis_kendaraan == 'Mobil') : ?>
 
-                                                <tr>
-                                                    <td><?= $no++; ?></td>
-                                                    <td><?= $activity->nik; ?></td>
-                                                    <td><?= $activity->nama; ?></td>
-                                                    <td><?= $activity->departemen; ?></td>
-                                                    <td><?= $activity->no_kendaraan; ?></td>
-                                                    <td><?= $activity->jenis_kendaraan; ?></td>
-                                                    <td><?= $activity->activity_datetime; ?></td>
-                                                    <td>
-                                                        <?php if ($activity->activity_datetime_out == NULL) : ?>
-                                                            <div class="text-center">
-                                                                <a onclick="activityCheckOut('<?= base_url() . 'home/dataactivitycheckOut/' . $activity->no_kendaraan ?>')" class="btn btn-danger font-weight-bold"><i class="fas fa-sign-out-alt"></i> Check Out</a>
-                                                            </div>
-                                                        <?php else : ?>
-                                                            <?= $activity->activity_datetime_out ?>
-                                                        <?php endif; ?>
-                                                    </td>
-
-                                                </tr>
+                                    <tr>
+                                        <td><?= $no++; ?></td>
+                                        <td><?= $activity->nik; ?></td>
+                                        <td><?= $activity->nama; ?></td>
+                                        <td><?= $activity->departemen; ?></td>
+                                        <td><?= $activity->no_kendaraan; ?></td>
+                                        <td><?= $activity->jenis_kendaraan; ?></td>
+                                        <td><?= $activity->activity_datetime; ?></td>
+                                        <td>
+                                            <?php if ($activity->activity_datetime_out == NULL) : ?>
+                                            <div class="text-center">
+                                                <a onclick="activityCheckOut('<?= base_url() . 'home/dataactivitycheckOut/' . $activity->no_kendaraan ?>')"
+                                                    class="btn btn-danger font-weight-bold"><i
+                                                        class="fas fa-sign-out-alt"></i> Check Out</a>
+                                            </div>
+                                            <?php else : ?>
+                                            <?= $activity->activity_datetime_out ?>
                                             <?php endif; ?>
-                                        <?php endif; ?>
+                                        </td>
+
+                                    </tr>
+                                    <?php endif; ?>
+                                    <?php endif; ?>
                                     <?php endforeach; ?>
 
                                 </tbody>
@@ -280,7 +272,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; E-Parkir <?= date('Y'); ?></span>
+                    <span>Copyright &copy; Galang Hanafi <?= date('Y'); ?></span>
                 </div>
             </div>
         </footer>

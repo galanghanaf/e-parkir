@@ -274,17 +274,7 @@
                                             <th>Create Date</th>
                                         </tr>
                                     </thead>
-                                    <!-- <tfoot>
-                                        <tr>
-                                        <th>NIK</th>
-                                            <th>Nama</th>
-                                            <th>Bagian</th>
-                                            <th>No. Kendaraan</th>
-                                            <th>Jenis Kendaraan</th>
-                                            <th>Jam Masuk</th>
-                                        </tr>
-                                        </tr>
-                                    </tfoot> -->
+
                                     <tbody>
                                         <?php $no = 1;
                                         foreach ($queryActivity as $activitykendaraan) : ?>
@@ -323,7 +313,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; E-Parkir <?= date('Y'); ?></span>
+                        <span>Copyright &copy; Galang Hanafi <?= date('Y'); ?></span>
                     </div>
                 </div>
             </footer>

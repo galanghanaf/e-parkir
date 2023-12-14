@@ -48,11 +48,11 @@
                 <span>Data Kendaraan</span></a>
         </li>
         <?php if ($login['role_id'] == 'ADMIN') : ?>
-            <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
-                <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Data User</span></a>
-            </li>
+        <li class="nav-item <?= $title == 'Data User' ? 'active' : ''; ?>">
+            <a class="nav-link" href="<?= base_url() . 'admin/datauser'; ?>">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Data User</span></a>
+        </li>
         <?php endif; ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
@@ -87,13 +87,16 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">Selamat Datang, </span>
                             <span class="mr-2 d-none d-lg-inline text-primary small"><?= $login['nama'] ?></span>
-                            <img class="img-profile rounded-circle" src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
+                            <img class="img-profile rounded-circle"
+                                src="<?= base_url() . 'assets/imgusers/' . $login['photo']; ?>">
                         </a>
                         <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="<?= base_url() . 'home/profil/' . $login['username']; ?>">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
@@ -118,7 +121,8 @@
                 <!-- Page Heading -->
                 <h1 class="mb-2 text-gray-800 text-center font-weight-bold"><?= $title; ?></h1>
                 <div class="text-center mb-3">
-                    <button type="button" class="btn btn-success tombolTambahData text-center font-weight-bold" data-toggle="modal" data-target="#staticBackdrop">
+                    <button type="button" class="btn btn-success tombolTambahData text-center font-weight-bold"
+                        data-toggle="modal" data-target="#staticBackdrop">
                         <i class='fas fa-plus-circle'></i> Tambah Data
                     </button>
                 </div>
@@ -129,7 +133,8 @@
                     <div class="card-header py-3">
                         <h6 class="mt-1 font-weight-bold text-primary float-left"><?= $title; ?></h6>
 
-                        <a href="<?= base_url() . 'home/datakaryawan' ?>" class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
+                        <a href="<?= base_url() . 'home/datakaryawan' ?>"
+                            class="btn btn-sm btn-primary font-weight-bold float-right"><i class="fa fa-retweet"></i>
                             Refresh</a>
                     </div>
                     <?php echo $this->session->flashdata('message') ?>
@@ -147,33 +152,24 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <!-- <tfoot>
-                                        <tr>
-                                        <th>NIK</th>
-                                            <th>Nama</th>
-                                            <th>departemen</th>
-                                            <th>No. Kendaraan</th>
-                                            <th>Jenis Kendaraan</th>
-                                            <th>Jam Masuk</th>
-                                        </tr>
-                                        </tr>
-                                    </tfoot> -->
+
                                 <tbody>
                                     <?php $no = 1;
                                     foreach ($queryKaryawan as $row) : ?>
-                                        <?php if ($row->plant == $login['plant']) : ?>
-                                            <tr>
-                                                <td><?= $no++; ?></td>
-                                                <td><?= $row->nik; ?></td>
-                                                <td><?= $row->nama; ?></td>
-                                                <td><?= $row->departemen; ?></td>
-                                                <td><?= $row->plant; ?></td>
+                                    <?php if ($row->plant == $login['plant']) : ?>
+                                    <tr>
+                                        <td><?= $no++; ?></td>
+                                        <td><?= $row->nik; ?></td>
+                                        <td><?= $row->nama; ?></td>
+                                        <td><?= $row->departemen; ?></td>
+                                        <td><?= $row->plant; ?></td>
 
-                                                <td class="text-center">
-                                                    <a href="<?= base_url() . 'home/datakaryawanedit/' . $row->nik ?>" class="btn btn-primary"><i class="fas fa-eye"></i></a>
-                                                </td>
-                                            </tr>
-                                        <?php endif; ?>
+                                        <td class="text-center">
+                                            <a href="<?= base_url() . 'home/datakaryawanedit/' . $row->nik ?>"
+                                                class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    <?php endif; ?>
                                     <?php endforeach; ?>
 
                                 </tbody>
@@ -189,15 +185,18 @@
         <!-- End of Main Content -->
 
         <!-- Start Modal -->
-        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div class=" modal-content">
                     <div class="modal-header">
-                        <span class="h4 mt-2">Tambah Karyawan | <span class="h6"><?= date("d-m-Y,h:i:s") ?></span></span>
+                        <span class="h4 mt-2">Tambah Karyawan | <span
+                                class="h6"><?= date("d-m-Y,h:i:s") ?></span></span>
 
                     </div>
                     <div class="modal-body">
-                        <form id="formUser" action="<?= base_url() . '/home/datakaryawan' ?>" method="post" enctype="multipart/form-data">
+                        <form id="formUser" action="<?= base_url() . '/home/datakaryawan' ?>" method="post"
+                            enctype="multipart/form-data">
 
                             <div class="row">
                                 <!-- Start Left Form -->
@@ -209,24 +208,31 @@
                                             <div class="mb-3">
                                                 <label for="nik" class="form-label control-label">NIK</label>
                                                 <input type="number" name="nik" class="form-control" id="nik">
-                                                <input type="hidden" name="create_by" class="form-control" id="create_by" value="<?= $login['nama']; ?>">
+                                                <input type="hidden" name="create_by" class="form-control"
+                                                    id="create_by" value="<?= $login['nama']; ?>">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="nama" class="form-label control-label">Nama</label>
-                                                <input type="text" name="nama" class="form-control" id="nama" oninput="this.value = this.value.toUpperCase()">
+                                                <input type="text" name="nama" class="form-control" id="nama"
+                                                    oninput="this.value = this.value.toUpperCase()">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="departemen" class="form-label control-label">Departemen</label>
-                                                <input type="text" name="departemen" class="form-control" id="departemen" oninput="this.value = this.value.toUpperCase()">
+                                                <label for="departemen"
+                                                    class="form-label control-label">Departemen</label>
+                                                <input type="text" name="departemen" class="form-control"
+                                                    id="departemen" oninput="this.value = this.value.toUpperCase()">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="plant" class="form-label control-label">Plant</label>
-                                                <input type="text" name="plant" class="form-control" id="plant" readonly value="<?= $login['plant']; ?>">
+                                                <input type="text" name="plant" class="form-control" id="plant" readonly
+                                                    value="<?= $login['plant']; ?>">
                                             </div>
                                             <div class="mb-3 float-right">
 
-                                                <a class="btn btn-danger font-weight-bold mx-2" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</a>
-                                                <button type="submit" class="btn btn-success font-weight-bold" onclick="submitKaryawan(event);"><i class='fas fa-plus-circle'></i>
+                                                <a class="btn btn-danger font-weight-bold mx-2" data-dismiss="modal"><i
+                                                        class="fas fa-times"></i> Tutup</a>
+                                                <button type="submit" class="btn btn-success font-weight-bold"
+                                                    onclick="submitKaryawan(event);"><i class='fas fa-plus-circle'></i>
                                                     Tambah
                                                     Data</button>
                                             </div>
@@ -247,7 +253,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; E-Parkir <?= date('Y'); ?></span>
+                    <span>Copyright &copy; Galang Hanafi <?= date('Y'); ?></span>
                 </div>
             </div>
         </footer>
@@ -263,19 +269,19 @@
 
 
 <script>
-    function password_show_hide() {
-        var x = document.getElementById("password");
-        var show_eye = document.getElementById("show_eye");
-        var hide_eye = document.getElementById("hide_eye");
-        hide_eye.classList.remove("d-none");
-        if (x.type === "password") {
-            x.type = "text";
-            show_eye.style.display = "none";
-            hide_eye.style.display = "block";
-        } else {
-            x.type = "password";
-            show_eye.style.display = "block";
-            hide_eye.style.display = "none";
-        }
+function password_show_hide() {
+    var x = document.getElementById("password");
+    var show_eye = document.getElementById("show_eye");
+    var hide_eye = document.getElementById("hide_eye");
+    hide_eye.classList.remove("d-none");
+    if (x.type === "password") {
+        x.type = "text";
+        show_eye.style.display = "none";
+        hide_eye.style.display = "block";
+    } else {
+        x.type = "password";
+        show_eye.style.display = "block";
+        hide_eye.style.display = "none";
     }
+}
 </script>
